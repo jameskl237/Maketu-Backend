@@ -21,6 +21,11 @@ class BaseRepository
         return $this->model::find($id);
     }
 
+    public function findWithRelations($id, array $relations)
+    {
+        return $this->model::with($relations)->find($id);
+    }
+
     public function create(array $data)
     {
         return $this->model::create($data);

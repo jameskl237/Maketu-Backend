@@ -15,7 +15,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            $result = $this->authService->login($request->validated());
+            $validated = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|string',
+            ]);
+            $result = $this->authService->login($validated);
 
             return ApiResponse::success(
                 $result,
@@ -29,12 +33,29 @@ class AuthController extends Controller
                 $e->errors()
             );
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             return ApiResponse::error(
                 'Erreur lors de la connexion',
                 HttpStatus::INTERNAL_SERVER_ERROR,
                 ['exception' => $e->getMessage()]
             );
         }
+    }
+
+    public function getUserConnected(Request $request)
+    {
+        $user = $request->user()->load('shops');
+        return ApiResponse::success(
+            $user,
+            'Utilisateur connecté récupéré',
+            HttpStatus::OK
+        );
+    }
+
+     public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return ApiResponse::success([], 'Déconnexion réussie', HttpStatus::OK);
     }
 }

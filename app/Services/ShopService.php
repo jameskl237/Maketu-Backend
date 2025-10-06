@@ -21,9 +21,7 @@ class ShopService
 
     public function getShopById($id)
     {
-        return $this->shopRepository->find($id)->with('products')
-                                                ->with('user')
-                                                ->first();       
+        return $this->shopRepository->findWithRelations($id, ['products', 'user']);
     }
 
     public function createShop(array $data)

@@ -11,7 +11,7 @@ class Product extends Model
     protected $fillable =[
         'name',
         'description',
-        'description_longue',
+        'long_description',
         'price',
         'promotion_price',
         'in_stock',
@@ -19,7 +19,12 @@ class Product extends Model
         'quantity',
         'category_id',
         'user_id',
-        'shop_id'
+        'shop_id',
+        'code'
+    ];
+
+    protected $casts = [
+        'in_stock' => 'boolean',
     ];
 
     public function category(): BelongsTo
