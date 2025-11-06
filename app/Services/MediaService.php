@@ -115,8 +115,8 @@ class MediaService
             return false;
         }
 
-        // Supprimer le fichier physique
-        if (Storage::disk('public')->exists($media->url)) {
+        // Supprimer le fichier physique si l'URL existe
+        if ($media->url && Storage::disk('public')->exists($media->url)) {
             Storage::disk('public')->delete($media->url);
         }
 
