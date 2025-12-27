@@ -141,20 +141,23 @@ class ProductController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'nullable|string|max:1000',
+                'name'             => 'sometimes|string|max:255',
+                'description'      => 'nullable|string|max:1000',
                 'long_description' => 'nullable|string|max:5000',
-                'price' => 'sometimes|required|numeric|min:0',
-                'promotion_price' => 'nullable|numeric|min:0',
-                'in_stock' => 'boolean',
-                'quantity' => 'sometimes|required|numeric|min:0',
-                'origin' => 'sometimes|required|in:local,imported',
-                'category_id' => 'sometimes|required|exists:categories,id',
-                'shop_id' => 'sometimes|required|exists:shops,id',
-                'new_images' => 'nullable|array|max:10',
-                'new_images.*' => 'file|mimes:jpeg,png,jpg,gif,webp|max:5120',
-                'new_videos' => 'nullable|array|max:5',
-                'new_videos.*' => 'file|mimes:mp4,avi,mov,wmv|max:51200',
+                'price'            => 'sometimes|numeric|min:0',
+                'promotion_price'  => 'nullable|numeric|min:0|lt:price',
+                'in_stock'         => 'sometimes|in:true,false,1,0',
+                'quantity'         => 'sometimes|numeric|min:0',
+                'origin'           => 'sometimes|in:local,imported',
+                'category_id'      => 'sometimes|exists:categories,id',
+                'shop_id'          => 'sometimes|exists:shops,id',
+
+                // Gestion des médias
+                'media_to_delete'   => 'nullable|array',
+                'media_to_delete.*' => 'integer|exists:medias,id', // Valide que chaque ID existe
+                
+                'files'             => 'nullable|array|max:10',
+                'files.*'           => 'file|mimes:jpeg,png,jpg,gif,webp,mp4,webm,ogg|max:10240',
             ]);
 
             if ($validator->fails()) {
@@ -171,12 +174,26 @@ class ProductController extends Controller
                 'category_id', 'shop_id'
             ]);
 
-            // Récupération des nouveaux fichiers
-            $newImages = $request->hasFile('new_images') ? $request->file('new_images') : [];
-            $newVideos = $request->hasFile('new_videos') ? $request->file('new_videos') : [];
+            if ($request->has('in_stock')) {
+                $data['in_stock'] = filter_var($request->input('in_stock'), FILTER_VALIDATE_BOOLEAN);
+            }
 
-            // Mise à jour du produit avec ses nouveaux médias
-            $product = $this->productService->updateProductWithMedias($id, $data, $newImages, $newVideos);
+            // Récupération des médias à supprimer et des nouveaux fichiers
+            $mediaToDelete = $request->input('media_to_delete', []);
+            $newFiles = $request->file('files', []);
+
+            $newImages = [];
+            $newVideos = [];
+            foreach ($newFiles as $file) {
+                if (str_starts_with($file->getMimeType(), 'image/')) {
+                    $newImages[] = $file;
+                } elseif (str_starts_with($file->getMimeType(), 'video/')) {
+                    $newVideos[] = $file;
+                }
+            }
+
+            // Mise à jour du produit avec gestion des médias
+            $product = $this->productService->updateProductWithMedias($id, $data, $newImages, $newVideos, $mediaToDelete);
 
             if (!$product) {
                 return ApiResponse::notFound('Produit non trouvé');

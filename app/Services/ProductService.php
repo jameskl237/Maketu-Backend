@@ -57,8 +57,19 @@ class ProductService
         return $this->productRepository->update($id, $data);
     }
 
-    public function updateProductWithMedias($id, array $productData, array $newImages = [], array $newVideos = [])
+    public function updateProductWithMedias($id, array $productData, array $newImages = [], array $newVideos = [], array $mediaToDelete = [])
     {
+        // Supprimer les médias marqués pour suppression
+        if (!empty($mediaToDelete)) {
+            foreach ($mediaToDelete as $mediaId) {
+                // On s'assure que le média appartient bien au produit pour la sécurité
+                $media = $this->mediaService->getMediaById($mediaId);
+                if ($media && $media->product_id == $id) {
+                    $this->mediaService->deleteMedia($mediaId);
+                }
+            }
+        }
+
         // Mettre à jour les données du produit
         $product = $this->updateProduct($id, $productData);
         
@@ -68,7 +79,9 @@ class ProductService
         
         // Ajouter les nouvelles images
         if (!empty($newImages)) {
-            $this->mediaService->uploadMultipleMedias($product->id, $newImages, 'image', false);
+            // Déterminer si un média principal doit être défini
+            $hasPrincipalImage = $product->medias()->where('type', 'image')->where('is_principal', true)->exists();
+            $this->mediaService->uploadMultipleMedias($product->id, $newImages, 'image', !$hasPrincipalImage);
         }
         
         // Ajouter les nouvelles vidéos
@@ -76,7 +89,7 @@ class ProductService
             $this->mediaService->uploadMultipleMedias($product->id, $newVideos, 'video', false);
         }
         
-        // Recharger le produit avec ses médias
+        // Recharger le produit avec ses médias pour retourner un état à jour
         return $this->getProductById($product->id);
     }
 

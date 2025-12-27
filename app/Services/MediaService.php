@@ -17,6 +17,11 @@ class MediaService
         $this->mediaRepository = $mediaRepository;
     }
 
+    public function getMediaById($id)
+    {
+        return $this->mediaRepository->find($id);
+    }
+
     /**
      * Récupérer tous les médias d'un produit
      */
