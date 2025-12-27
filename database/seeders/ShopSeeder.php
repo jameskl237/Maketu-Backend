@@ -18,7 +18,7 @@ class ShopSeeder extends Seeder
         $suppliers = User::where('role', 'supplier')->get();
 
         foreach ($suppliers as $supplier) {
-            for ($i = 1; $i <= 2; $i++) {
+            for ($i = 1; $i <= 10; $i++) {
                 Shop::create([
                     'name' => "Boutique {$i} de {$supplier->name}",
                     'description' => "Boutique spécialisée à {$cities[array_rand($cities)]}",

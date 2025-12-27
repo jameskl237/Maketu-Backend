@@ -55,16 +55,8 @@ class MediaController extends Controller
                 return ApiResponse::noContent('Aucune image principale trouvée pour ce produit');
             }
 
-            $mediaData = [
-                'id' => $media->id,
-                'url' => $this->mediaService->getMediaUrl($media),
-                'type' => $media->type,
-                'is_principal' => $media->is_principal,
-                'created_at' => $media->created_at
-            ];
-
             return ApiResponse::success(
-                $mediaData,
+                $media,
                 'Image principale récupérée avec succès',
                 HttpStatus::OK
             );
