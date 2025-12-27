@@ -6,6 +6,7 @@ use App\Repositories\MediaRepository;
 use App\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MediaService
@@ -15,6 +16,11 @@ class MediaService
     public function __construct(MediaRepository $mediaRepository)
     {
         $this->mediaRepository = $mediaRepository;
+    }
+
+    public function getMediaById($id)
+    {
+        return $this->mediaRepository->find($id);
     }
 
     /**
@@ -47,6 +53,14 @@ class MediaService
      */
     public function uploadAndCreateMedia($productId, UploadedFile $file, $type = 'image', $isPrincipal = false)
     {
+        Log::debug("uploadAndCreateMedia appelé", [
+            'productId' => $productId,
+            'file_name' => $file->getClientOriginalName(),
+            'file_size' => $file->getSize(),
+            'type' => $type,
+            'isPrincipal' => $isPrincipal
+        ]);
+
         // Validation du fichier
         $this->validateFile($file, $type);
 
