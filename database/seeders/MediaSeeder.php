@@ -19,7 +19,7 @@ class MediaSeeder extends Seeder
         foreach ($products as $product) {
             // 1 image principale
             Media::create([
-                'url' => 'products/default.jpg',
+                'url' => 'products/image_20251103161135_PExm9iqi.jpg',
                 'type' => 'image',
                 'is_principal' => true,
                 'product_id' => $product->id,
@@ -28,7 +28,7 @@ class MediaSeeder extends Seeder
             // + 1-2 images supplémentaires
             for ($i = 1; $i <= rand(1, 2); $i++) {
                 Media::create([
-                    'url' => 'products/image' . rand(1, 3) . '.jpg',
+                    'url' => 'products/image_20251103161135_PExm9iqi.jpg',
                     'type' => 'image',
                     'is_principal' => false,
                     'product_id' => $product->id,
@@ -38,7 +38,7 @@ class MediaSeeder extends Seeder
             // + 0-1 vidéos
             if (rand(0, 1)) {
                 Media::create([
-                    'url' => 'products/video' . rand(1, 2) . '.mp4',
+                    'url' => 'products/babachirou.mp4',
                     'type' => 'video',
                     'is_principal' => false,
                     'product_id' => $product->id,

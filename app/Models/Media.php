@@ -2,20 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Media extends Model
 {
+    use HasFactory;
+    
     protected $table = 'medias'; 
-     protected $appends = ['url'];
+     protected $appends = ['full_url'];
 
-    public function getUrlAttribute()
+    public function getFullUrlAttribute()
     {
         // Si le fichier existe, retourne une URL complète
-        return $this->file_path
-            ? Storage::url($this->file_path)
+        return $this->url
+            ? asset(Storage::url($this->url))
             : null;
     }
     
