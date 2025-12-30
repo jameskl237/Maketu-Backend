@@ -37,12 +37,17 @@ class Product extends Model
 
     public function medias(): HasMany
     {
-        return $this->HasMany(Media::class);
+        return $this->hasMany(Media::class);
     }
 
     public function shop(): BelongsTo
-{
-    return $this->belongsTo(Shop::class, 'shop_id');
-}
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
 }
