@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class);
     }
+
+    // 🛍️ Un utilisateur peut avoir plusieurs commandes
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

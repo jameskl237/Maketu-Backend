@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,7 @@ Route::prefix('shops')->group(function () {
     Route::get('/', [\App\Http\Controllers\ShopController::class, 'index'])->name('shops.index');
     Route::get('/{id}', [\App\Http\Controllers\ShopController::class, 'show'])->name('shops.show');
 });
+
 // Routes protégées par Sanctum
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/products', [ProductController::class, "create"])->name('products.create');
@@ -48,6 +51,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [\App\Http\Controllers\ShopController::class, 'update'])->name('shops.update');
         Route::delete('/{id}', [\App\Http\Controllers\ShopController::class, 'delete'])->name('shops.delete');
     });
+
+    // Routes pour les commandes
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Routes pour les utilisateurs
+    Route::apiResource('users', UserController::class)->except(['create', 'edit']);
 
     Route::get('auth/user', [AuthController::class, 'getUserConnected'])->name('auth.user');
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');

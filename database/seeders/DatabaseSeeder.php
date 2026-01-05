@@ -17,6 +17,7 @@ public function run()
     $this->call([
         CategorySeeder::class,
         UserSeeder::class,
+        AdminSeeder::class,
         ShopSeeder::class,
         ProductSeeder::class,
         MediaSeeder::class,
