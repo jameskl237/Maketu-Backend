@@ -24,6 +24,7 @@ class ShopFactory extends Factory
             'user_id' => User::factory(),
             'city' => $this->faker->city,
             'district' => $this->faker->streetName,
+            'phone' => '237' . $this->faker->numerify('##########'),
         ];
     }
 }

@@ -110,7 +110,7 @@ class ProductService
 
     public function getProductsWithMedias()
     {
-        return $this->productRepository->all()->load(['category', 'medias', 'shop']);
+        return $this->productRepository->allWithRelations(['category', 'medias', 'shop']);
     }
 
     public function getProductWithMediaUrls($id)

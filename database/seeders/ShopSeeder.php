@@ -24,6 +24,7 @@ class ShopSeeder extends Seeder
                     'description' => "Boutique spécialisée à {$cities[array_rand($cities)]}",
                     'city' => $cities[array_rand($cities)],
                     'district' => $districts[array_rand($districts)],
+                    'phone' => '237695988879',
                     'user_id' => $supplier->id,
                 ]);
             }

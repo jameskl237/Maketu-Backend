@@ -13,15 +13,26 @@ class UserSeeder extends Seeder
     public function run()
     {
         for ($i = 1; $i <= 5; $i++) {
-            User::create([
-                'name' => "Fournisseur $i",
-                'email' => "supplier$i@example.com",
-                'role' => 'supplier',
-                'password' => Hash::make('password'),
-                'username' => "supplier$i",
-                'phone' => '6' . rand(50000000, 99999999),
-                'address' => "Adresse $i",
-            ]);
+            $email = "supplier$i@example.com";
+            $user = User::where('email', $email)->first();
+            
+            if ($user) {
+                // Mettre à jour le mot de passe si l'utilisateur existe déjà
+                $user->update([
+                    'password' => Hash::make('password'),
+                ]);
+            } else {
+                // Créer un nouvel utilisateur
+                User::create([
+                    'name' => "Fournisseur $i",
+                    'email' => $email,
+                    'role' => 'supplier',
+                    'password' => Hash::make('password'),
+                    'username' => "supplier$i",
+                    'phone' => '237695988879',
+                    'address' => "Adresse $i",
+                ]);
+            }
         }
     }
 }

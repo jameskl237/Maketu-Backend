@@ -26,6 +26,11 @@ class BaseRepository
         return $this->model::with($relations)->find($id);
     }
 
+    public function allWithRelations(array $relations)
+    {
+        return $this->model::with($relations)->get();
+    }
+
     public function create(array $data)
     {
         return $this->model::create($data);

@@ -14,6 +14,7 @@ class Shop extends Model
         'description',
         'city',
         'district',
+        'phone',
         'user_id',
     ];
 
