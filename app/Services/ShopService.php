@@ -19,9 +19,14 @@ class ShopService
        return $this->shopRepository->all();
     }
 
+    public function getAllShopsWithProductsAndMedias()
+    {
+        return $this->shopRepository->allWithRelations(['products', 'user', 'products.medias']);
+    }
+
     public function getShopById($id)
     {
-        return $this->shopRepository->findWithRelations($id, ['products', 'user']);
+        return $this->shopRepository->findWithRelations($id, ['products', 'user', 'products.medias']);
     }
 
     public function createShop(array $data)
@@ -37,6 +42,6 @@ class ShopService
 
     public function deleteShop($id)
     {
-        return $this->shopRepository->delete($id)->with('products')->first();
+        return $this->shopRepository->delete($id);
     }
 }

@@ -6,10 +6,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 // Routes publiques
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/register-supplier', [SupplierRegistrationController::class, 'registerSupplier'])->name('supplier.register');
 Route::get('/products', [ProductController::class, "index"])->name('products.index');
 Route::get('/products/{id}', [ProductController::class, "show"])->name('products.show');
 
