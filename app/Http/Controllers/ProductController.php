@@ -19,8 +19,9 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
     
-    public function index()
+    public function index(Request $request)
     {
+        dd($request->fullUrl());
         try {
             $products = $this->productService->getProductsWithMedias();
             
