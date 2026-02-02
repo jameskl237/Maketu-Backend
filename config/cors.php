@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://maketu.mirhosty.com',
+        'https://maketushop.com',
         'http://localhost:5173',
         'http://localhost:3000',
         'http://127.0.0.1:5173',
